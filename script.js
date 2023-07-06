@@ -48,6 +48,12 @@ class Projectile {
         context.fillStyle = this.color
         context.fill()
     }
+
+    update() {
+        //This will move projectile from center by adding velocity to x and y coordinates
+        this.x = this.x + this.velocity.x
+        this.y = this.y + this.velocity.y
+    }
 }
 
 //This will set the x coordinate to the middle of the screen by dividing the width by half
@@ -59,8 +65,28 @@ const player = new Player(x, y, 30, 'purple')
 //This will tell the player to call the draw() function
 player.draw()
 
-console.log(player)
+const projectile = new Projectile(
+    // This will spawn the projectiles in the center
+    canvas.width / 2,
+    canvas.height / 2,
+    5,
+    'red',
+    {
+        x: 1,
+        y: 1
+    }
+)
 
+//Animation loop will allow projectile to move from center to where ever we click on the screen
+function animate() {
+    requestAnimationFrame(animate)
+    projectile.draw()
+    projectile.update()
+}
+
+//Activates code when a user clicks on the window by listening to click event
 addEventListener('click', (event) => {
-    const Projectile = new Projectile()
+
 })
+
+animate()
