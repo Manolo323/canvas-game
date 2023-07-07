@@ -50,6 +50,7 @@ class Projectile {
     }
 
     update() {
+        this.draw()
         //This will move projectile from center by adding velocity to x and y coordinates
         this.x = this.x + this.velocity.x
         this.y = this.y + this.velocity.y
@@ -77,11 +78,28 @@ const projectile = new Projectile(
     }
 )
 
+const projectile2 = new Projectile(
+    // This will spawn the projectiles in the center
+    canvas.width / 2,
+    canvas.height / 2,
+    5,
+    'blue',
+    {
+        x: -1,
+        y: -1
+    }
+)
+
+//Renders multiple particles within animate loop by creating an array
+const projectiles =[projectile, projectile2]
+
 //Animation loop will allow projectile to move from center to where ever we click on the screen
 function animate() {
     requestAnimationFrame(animate)
-    projectile.draw()
-    projectile.update()
+    projectiles.forEach(projectile => {
+        projectile.update()
+        }
+    )
 }
 
 //Activates code when a user clicks on the window by listening to click event
