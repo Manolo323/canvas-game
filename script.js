@@ -80,7 +80,7 @@ function animate() {
 
 //Activates code when a user clicks on the window by listening to click event
 addEventListener('click', (event) => {
-    //This will
+    //This will set the velocity of the projectiles using an equation to set the angle
     const angle = Math.atan2(event.clientY - canvas.height / 2, event.clientX - canvas.width / 2)
     projectiles.push(new Projectile(
         canvas.width / 2, canvas.height / 2, 5, 'red', {
