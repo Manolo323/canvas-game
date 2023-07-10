@@ -88,7 +88,7 @@ const x = canvas.width / 2
 //This will set the y coordinate to the middle of the screen by dividing the height by half
 const y = canvas.height / 2
 
-const player = new Player(x, y, 30, 'purple')
+const player = new Player(x, y, 10, 'white')
 //Renders multiple particles within animate loop by creating an array
 const projectiles =[]
 //Contains each instance for each enemy we create
@@ -98,7 +98,7 @@ const enemies = []
 function spawnEnemies() {
     setInterval(() => {
         const radius = Math.random() * (30 - 4) + 4
-        // references x and y outside of the if statement
+        // references x and y outside the if statement
         let x
         let y
         //calls math.random if x < 0.5
@@ -110,7 +110,8 @@ function spawnEnemies() {
             y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius
         }
 
-        const color = 'blue'
+        //adds random color to enemies
+        const color = `hsl(${Math.random() * 360}, 50%,  50%)`
         //This will set the velocity of the enemies using an equation to set the angle
         const angle = Math.atan2(
             canvas.height / 2 - y,
@@ -129,11 +130,25 @@ function spawnEnemies() {
 let  animationId
 function animate() {
     animationId = requestAnimationFrame(animate)
-    context.clearRect(0 ,0 , canvas.width, canvas.height)
+    //Colors in the background
+    context.fillStyle = 'rgba(0, 0, 0, 0.1)'
+    context.fillRect(0 ,0 , canvas.width, canvas.height)
     //This will tell the player to call the draw() function
     player.draw()
-    projectiles.forEach(projectile => {
+    projectiles.forEach((projectile, index) => {
         projectile.update()
+
+        // removes from edges of screen
+        if (
+            projectile.x + projectile.radius < 0 ||
+            projectile.x - projectile.radius > canvas.width ||
+            projectile.y + projectile.radius < 0 ||
+            projectile.y - projectile.radius > canvas.height
+        ) {
+            setTimeout(()  => {
+                projectiles.splice(index, 1)
+            }, 0)
+        }
         })
 
     enemies.forEach((enemy, index) => {
@@ -168,11 +183,11 @@ addEventListener('click', (event) => {
     )
     //Sets velocity
     const velocity = {
-        x: Math.cos(angle),
-        y: Math.sin(angle)
+        x: Math.cos(angle) * 5,
+        y: Math.sin(angle) * 5
     }
     projectiles.push(new Projectile(
-        canvas.width / 2, canvas.height / 2, 5, 'red', velocity)
+        canvas.width / 2, canvas.height / 2, 5, 'white', velocity)
     )
 })
 
