@@ -135,8 +135,20 @@ function animate() {
         projectile.update()
         })
 
-    enemies.forEach(enemy => {
+    enemies.forEach((enemy, index) => {
         enemy.update()
+
+        projectiles.forEach((projectile, projectileIndex) => {
+            // Gets distance between projectile and enemy
+            const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
+            //removes enemy once projectile hits enemy
+            if (dist -  enemy.radius - projectile.radius < 1) {
+                setTimeout(()  => {
+                enemies.splice(index, 1)
+                projectiles.splice(projectileIndex, 1)
+                }, 0)
+            }
+        })
     })
 }
 
