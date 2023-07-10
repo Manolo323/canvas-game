@@ -126,8 +126,9 @@ function spawnEnemies() {
     }, 1000)
 }
 //Animation loop will allow projectile to move from center to where ever we click on the screen
+let  animationId
 function animate() {
-    requestAnimationFrame(animate)
+    animationId = requestAnimationFrame(animate)
     context.clearRect(0 ,0 , canvas.width, canvas.height)
     //This will tell the player to call the draw() function
     player.draw()
@@ -137,6 +138,12 @@ function animate() {
 
     enemies.forEach((enemy, index) => {
         enemy.update()
+        // Gets distance between enemy and player
+        const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y)
+        // Ends game
+        if (dist -  enemy.radius - player.radius < 1) {
+            cancelAnimationFrame(animationId)
+        }
 
         projectiles.forEach((projectile, projectileIndex) => {
             // Gets distance between projectile and enemy
