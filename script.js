@@ -82,6 +82,37 @@ class Enemy {
         this.y = this.y + this.velocity.y
     }
 }
+// blueprint for explosion animation when enemy is hit
+class Particle {
+    constructor(x, y, radius, color, velocity) {
+        this.x = x
+        this.y = y
+        this.radius = radius
+        this.color = color
+        this.velocity = velocity
+        this.alpha = 1
+    }
+    draw () {
+        context.save()
+        context.globalAlpha = this.alpha
+        //Specifies we want to draw on the screen
+        context.beginPath()
+        //Arc function: context.arc(x: Int, y: Int, r: Int, startAngle: Float, endAngle: Float, drawCounterClockwise: Boolean)
+        context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+        //Specifies players color: Blue
+        context.fillStyle = this.color
+        context.fill()
+        context.restore()
+    }
+
+    update() {
+        this.draw()
+        //This will move projectile from center by adding velocity to x and y coordinates
+        this.x = this.x + this.velocity.x
+        this.y = this.y + this.velocity.y
+        this.alpha -= 0.01
+    }
+}
 
 //This will set the x coordinate to the middle of the screen by dividing the width by half
 const x = canvas.width / 2
@@ -93,7 +124,8 @@ const player = new Player(x, y, 10, 'white')
 const projectiles =[]
 //Contains each instance for each enemy we create
 const enemies = []
-
+//Renders particles once enemy is hit
+const particles = []
 //This will spawn enemies
 function spawnEnemies() {
     setInterval(() => {
@@ -135,6 +167,14 @@ function animate() {
     context.fillRect(0 ,0 , canvas.width, canvas.height)
     //This will tell the player to call the draw() function
     player.draw()
+    //removes particles from the screen
+    particles.forEach((particle, index) => {
+        if (particle.alpha <= 0) {
+            particles.splice(index, 1)
+        } else {
+            particle.update()
+        }
+    })
     projectiles.forEach((projectile, index) => {
         projectile.update()
 
@@ -165,6 +205,15 @@ function animate() {
             const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
             //removes enemy once projectile hits enemy
             if (dist -  enemy.radius - projectile.radius < 1) {
+                // creates a number of particles that are rendered to the screen
+                for (let i = 0; i < 8; i++) {
+                    particles.push(
+                        new Particle(projectile.x, projectile.y, 3, enemy.color, {
+                        x: Math.random() - 0.5,
+                        y: Math.random() - 0.5
+                    })
+                    )
+                }
                 //Shrinks enemy if it is hit
                 if (enemy.radius - 10 > 5) {
                     //Adds shrinking animation
