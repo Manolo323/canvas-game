@@ -66,32 +66,8 @@ const player = new Player(x, y, 30, 'purple')
 //This will tell the player to call the draw() function
 player.draw()
 
-const projectile = new Projectile(
-    // This will spawn the projectiles in the center
-    canvas.width / 2,
-    canvas.height / 2,
-    5,
-    'red',
-    {
-        x: 1,
-        y: 1
-    }
-)
-
-const projectile2 = new Projectile(
-    // This will spawn the projectiles in the center
-    canvas.width / 2,
-    canvas.height / 2,
-    5,
-    'blue',
-    {
-        x: -1,
-        y: -1
-    }
-)
-
 //Renders multiple particles within animate loop by creating an array
-const projectiles =[projectile, projectile2]
+const projectiles =[]
 
 //Animation loop will allow projectile to move from center to where ever we click on the screen
 function animate() {
@@ -104,7 +80,14 @@ function animate() {
 
 //Activates code when a user clicks on the window by listening to click event
 addEventListener('click', (event) => {
-
+    //This will
+    const angle = Math.atan2(event.clientY - canvas.height / 2, event.clientX - canvas.width / 2)
+    projectiles.push(new Projectile(
+        canvas.width / 2, canvas.height / 2, 5, 'red', {
+            x: 1,
+            y: 1
+        })
+    )
 })
 
 animate()
