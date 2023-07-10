@@ -165,10 +165,21 @@ function animate() {
             const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
             //removes enemy once projectile hits enemy
             if (dist -  enemy.radius - projectile.radius < 1) {
+                //Shrinks enemy if it is hit
+                if (enemy.radius - 10 > 5) {
+                    //Adds shrinking animation
+                    gsap.to(enemy, {
+                        radius: enemy.radius - 10
+                    })
+                    setTimeout(()  => {
+                        projectiles.splice(projectileIndex, 1)
+                    }, 0)
+                } else {
                 setTimeout(()  => {
                 enemies.splice(index, 1)
                 projectiles.splice(projectileIndex, 1)
                 }, 0)
+                }
             }
         })
     })
