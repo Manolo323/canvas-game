@@ -97,18 +97,32 @@ const enemies = []
 //This will spawn enemies
 function spawnEnemies() {
     setInterval(() => {
-        const x = 100
-        const y = 100
-        const radius = 30
+        const radius = Math.random() * (30 - 4) + 4
+        // references x and y outside of the if statement
+        let x
+        let y
+        //calls math.random if x < 0.5
+        if (Math.random() < 0.5) {
+            x = Math.random() < 0.5 ? 0 - radius : canvas.width + radius
+            y = Math.random() * canvas.height
+        } else {
+            x = Math.random() * canvas.width
+            y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius
+        }
+
         const color = 'blue'
+        //This will set the velocity of the enemies using an equation to set the angle
+        const angle = Math.atan2(
+            canvas.height / 2 - y,
+            canvas.width / 2 - x
+        )
+        //Sets velocity
         const velocity = {
-            x: 1,
-            y:  1
+            x: Math.cos(angle),
+            y: Math.sin(angle)
         }
 
         enemies.push(new Enemy(x, y, radius, color, velocity))
-
-        console.log(enemies)
     }, 1000)
 }
 //Animation loop will allow projectile to move from center to where ever we click on the screen
