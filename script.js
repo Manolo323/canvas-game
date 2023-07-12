@@ -217,9 +217,6 @@ function animate() {
             if (dist -  enemy.radius - projectile.radius < 1) {
                 // creates a number of particles that are rendered to the screen
                 for (let i = 0; i < enemy.radius * 2; i++) {
-                    //Increases score
-                    score += 100
-                    scoreEl.innerHTML = score
                     particles.push(
                         new Particle(projectile.x, projectile.y, Math.random() * 2, enemy.color, {
                         x: (Math.random() - 0.5) * (Math.random() * 5),
@@ -229,6 +226,9 @@ function animate() {
                 }
                 //Shrinks enemy if it is hit
                 if (enemy.radius - 10 > 5) {
+                    //Increases score
+                    score += 50
+                    scoreEl.innerHTML = score
                     //Adds shrinking animation
                     gsap.to(enemy, {
                         radius: enemy.radius - 10
@@ -237,6 +237,9 @@ function animate() {
                         projectiles.splice(projectileIndex, 1)
                     }, 0)
                 } else {
+                    //Increases score when an enemy is killed
+                    score += 100
+                    scoreEl.innerHTML = score
                 setTimeout(()  => {
                 enemies.splice(index, 1)
                 projectiles.splice(projectileIndex, 1)
