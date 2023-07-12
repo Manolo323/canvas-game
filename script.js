@@ -6,6 +6,9 @@ const context = canvas.getContext('2d')
 canvas.width = innerWidth
 canvas.height = innerHeight
 
+//selects the score element span in our document to update the score
+const scoreEl = document.querySelector('#scoreEl')
+
 //Creating a player
 class Player {
     //Will give a unique property to differentiate new players
@@ -82,6 +85,9 @@ class Enemy {
         this.y = this.y + this.velocity.y
     }
 }
+
+// slows  down particles
+const friction = 0.97
 // blueprint for explosion animation when enemy is hit
 class Particle {
     constructor(x, y, radius, color, velocity) {
@@ -108,6 +114,8 @@ class Particle {
     update() {
         this.draw()
         //This will move projectile from center by adding velocity to x and y coordinates
+        this.velocity.x *= friction
+        this.velocity.y *= friction
         this.x = this.x + this.velocity.x
         this.y = this.y + this.velocity.y
         this.alpha -= 0.01
@@ -160,6 +168,8 @@ function spawnEnemies() {
 }
 //Animation loop will allow projectile to move from center to where ever we click on the screen
 let  animationId
+//increases score when an enemy is hit
+let score = 0
 function animate() {
     animationId = requestAnimationFrame(animate)
     //Colors in the background
@@ -206,11 +216,14 @@ function animate() {
             //removes enemy once projectile hits enemy
             if (dist -  enemy.radius - projectile.radius < 1) {
                 // creates a number of particles that are rendered to the screen
-                for (let i = 0; i < 8; i++) {
+                for (let i = 0; i < enemy.radius * 2; i++) {
+                    //Increases score
+                    score += 100
+                    scoreEl.innerHTML = score
                     particles.push(
-                        new Particle(projectile.x, projectile.y, 3, enemy.color, {
-                        x: Math.random() - 0.5,
-                        y: Math.random() - 0.5
+                        new Particle(projectile.x, projectile.y, Math.random() * 2, enemy.color, {
+                        x: (Math.random() - 0.5) * (Math.random() * 5),
+                        y: (Math.random() - 0.5) * (Math.random() * 5)
                     })
                     )
                 }

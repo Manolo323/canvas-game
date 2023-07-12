@@ -1,0 +1,14 @@
+body {
+    margin: 0;
+}
+
+.fixed {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-top: .25rem;
+    margin-left: .5rem;
+    color: white;
+}
+
