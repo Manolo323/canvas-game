@@ -1,5 +1,7 @@
 body {
     margin: 0;
+/*keeps background color black*/
+    background-color: black;
 }
 
 /*score on the top right of game*/

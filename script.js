@@ -8,7 +8,12 @@ canvas.height = innerHeight
 
 //selects the score element span in our document to update the score
 const scoreEl = document.querySelector('#scoreEl')
-
+//Start game button
+const startGameBtn = document.querySelector('#startGameBtn')
+//Removes modal once game start button is pressed
+const modalEl = document.querySelector('#modalEl')
+//updates the score once the game is over
+const bigScoreEl = document.querySelector('#bigScoreEl')
 //Creating a player
 class Player {
     //Will give a unique property to differentiate new players
@@ -127,13 +132,24 @@ const x = canvas.width / 2
 //This will set the y coordinate to the middle of the screen by dividing the height by half
 const y = canvas.height / 2
 
-const player = new Player(x, y, 10, 'white')
+let player = new Player(x, y, 10, 'white')
 //Renders multiple particles within animate loop by creating an array
-const projectiles =[]
+let projectiles =[]
 //Contains each instance for each enemy we create
-const enemies = []
+let enemies = []
 //Renders particles once enemy is hit
-const particles = []
+let particles = []
+
+//calls the function to reset game
+function init() {
+    player = new Player(x, y, 10, 'white')
+    projectiles =[]
+    enemies = []
+    particles = []
+    score = 0
+    scoreEl.innerHTML = score
+    bigScoreEl.innerHTML = score
+}
 //This will spawn enemies
 function spawnEnemies() {
     setInterval(() => {
@@ -208,6 +224,9 @@ function animate() {
         // Ends game
         if (dist -  enemy.radius - player.radius < 1) {
             cancelAnimationFrame(animationId)
+            //adds modal once game ends
+            modalEl.style.display = 'flex'
+            bigScoreEl.innerHTML = score
         }
 
         projectiles.forEach((projectile, projectileIndex) => {
@@ -267,5 +286,11 @@ addEventListener('click', (event) => {
     )
 })
 
-animate()
-spawnEnemies()
+//starts game once button is pressed
+startGameBtn.addEventListener('click', () => {
+    init()
+    animate()
+    spawnEnemies()
+    //removes modal once game starts
+    modalEl.style.display = 'none'
+})
